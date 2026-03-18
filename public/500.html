@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W.M.E.S · 500</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Courier New', monospace;
+        }
+        .error-container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 700px;
+        }
+        .error-code {
+            font-size: 7rem;
+            font-weight: bold;
+            color: #ff4d4d;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            animation: flicker 3s infinite;
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            41% { opacity: 1; }
+            42% { opacity: 0.7; }
+            43% { opacity: 1; }
+            45% { opacity: 0.4; }
+            46% { opacity: 1; }
+        }
+        .error-title {
+            font-size: 2rem;
+            color: #d1d1d1;
+            margin-bottom: 2rem;
+        }
+        .console {
+            background: #111;
+            border: 1px solid #202020;
+            padding: 1.5rem;
+            text-align: left;
+            margin: 2rem 0;
+            font-family: 'Courier New', monospace;
+        }
+        .console-line {
+            color: #8a8a8a;
+            margin: 0.5rem 0;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 3s steps(40, end);
+        }
+        .console-line.error {
+            color: #ff4d4d;
+        }
+        .console-line.success {
+            color: #00ff00;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #202020;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 30%;
+            background: #ff4d4d;
+            animation: progress 2s infinite;
+        }
+        @keyframes progress {
+            0% { left: -30%; }
+            100% { left: 100%; }
+        }
+        .home-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.8rem 2rem;
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .home-link:hover {
+            background: #ff4d4d;
+            color: #0a0a0a;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">500</div>
+        <div class="error-title">INTERNAL SERVER ERROR</div>
+        <a href="/" class="home-link">← BACK TO HOME</a>
+    </div>
+</body>
+</html>

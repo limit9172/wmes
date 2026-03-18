@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W.M.E.S · 403</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Courier New', monospace;
+        }
+        .error-container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+            border: 1px solid #202020;
+        }
+        .error-code {
+            font-size: 6rem;
+            font-weight: bold;
+            color: #ff4d4d;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 10px rgba(255, 77, 77, 0.5));
+        }
+        .error-title {
+            font-size: 2rem;
+            color: #d1d1d1;
+            margin-bottom: 2rem;
+            letter-spacing: 5px;
+        }
+        .lock-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ff4d4d;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .error-message {
+            color: #8a8a8a;
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+        .access-log {
+            background: #111;
+            border: 1px solid #202020;
+            padding: 1rem;
+            text-align: left;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        .log-line {
+            color: #8a8a8a;
+            margin: 0.3rem 0;
+        }
+        .log-ip {
+            color: #ff4d4d;
+        }
+        .home-link {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .home-link:hover {
+            background: #ff4d4d;
+            color: #0a0a0a;
+        }
+        .warning {
+            color: #ff4d4d;
+            font-size: 0.8rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">403</div>
+        <div class="error-title">FORBIDDEN</div>
+        <a href="/" class="home-link">← BACK TO HOME</a>
+        <div class="warning">Just kidding, we don't log anything. But still, go away.</div>
+    </div>
+</body>
+</html>
