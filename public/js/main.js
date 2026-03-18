@@ -22,10 +22,35 @@ const teamData = [
         role: 'admin',
         motto: 'Menggunakan pengetahuan untuk menjaga, bukan menyalahgunakan',
         avatar: 'https://files.catbox.moe/pri0c4.jpg'
+    },
+    {
+        name: 'Poloss',
+        role: 'admin',
+        motto: 'Aku meretas bukan untuk merusak, tapi untuk mengungkap',
+        avatar: 'https://files.catbox.moe/jx5abj.jpg'        
+    },
+    {
+        name: './Mr-Shadownex',
+        role: 'admin',
+        motto: 'aku pedo dan aku bangga',
+        avatar: 'https://files.catbox.moe/kh830t.jpg'
+    },
+    {
+        nama: 'Lizarus',
+        role: 'admin',
+        motto:'kami masuk tanpa izin, keluar tanpa jejak—meninggalkan pelajaran, bukan luka',
+        avatar: 'https://files.catbox.moe/2rkywj.jpg'
+    },
+    {
+        nama: './Mr-Shahed',
+        role: 'aadmin',
+        motto: 'Kami bukan ancaman, kami adalah bayangan yang mengingatkan bahwa keamanan itu ilusi',
+        avatar: 'https://files.catbox.moe/1b16ah.jpg'
     }
+
 ];
 
-// ===== RENDER TEAM =====
+
 function renderTeam() {
     const container = document.getElementById('team-grid');
     if (!container) return;
@@ -44,7 +69,7 @@ function renderTeam() {
     `).join('');
 }
 
-// ===== LOADER =====
+
 window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
     if (loader) {
@@ -54,7 +79,7 @@ window.addEventListener('load', () => {
     }
 });
 
-// ===== SMOOTH SCROLL =====
+
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -69,7 +94,6 @@ document.querySelectorAll('.nav-link').forEach(link => {
     });
 });
 
-// ===== SCROLL SPY =====
 window.addEventListener('scroll', () => {
     const sections = document.querySelectorAll('.section');
     const navLinks = document.querySelectorAll('.nav-link');
@@ -92,7 +116,7 @@ window.addEventListener('scroll', () => {
     });
 });
 
-// ===== INIT =====
+
 document.addEventListener('DOMContentLoaded', () => {
     renderTeam();
 });
