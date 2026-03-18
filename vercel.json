@@ -18,11 +18,19 @@
     },
     {
       "source": "/robots.txt",
-      "destination": "public/robots.txt"
+      "destination": "/public/robots.txt"
     },
     {
       "source": "/sitemap.xml",
-      "destination": "public/sitemap.xml"
+      "destination": "/public/sitemap.xml"
+    },
+    {
+      "source": "/api",
+      "destination": "/public/api/index.html"
+    },
+    {
+      "source": "/api/(.*)",
+      "destination": "/public/api/$1"
     },
     {
       "source": "/(.*)",
