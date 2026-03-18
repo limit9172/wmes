@@ -3,13 +3,13 @@ const teamData = [
         name: './Mr-Rubic',
         role: 'founder & bug hunter',
         motto: 'melihat yang tak terlihat. data adalah bayangan',
-        avatar: 'https://api.dicebear.com/9.x/identicon/svg?seed=Mr-Rubic&backgroundColor=ff4d4d'
+        avatar: 'https://files.catbox.moe/haxm0f.jpg'
     },
     {
         name: 'ZenithxNecxus',
         role: 'admin & bug hunter',
         motto: 'Belajar, melindungi, dan berbagi demi keamanan digital',
-        avatar: 'https://api.dicebear.com/9.x/identicon/svg?seed=ZenithxNecxus&backgroundColor=ff4d4d'
+        avatar: 'https://files.catbox.moe/lxek04.jpg'
     },
     {
         name: './Mr-AliExploit',
@@ -21,7 +21,7 @@ const teamData = [
         name: 'Aryx7177.html',    
         role: 'admin',
         motto: 'Menggunakan pengetahuan untuk menjaga, bukan menyalahgunakan',
-        avatar: 'https://api.dicebear.com/9.x/identicon/svg?seed=Aryx7177&backgroundColor=ff4d4d'
+        avatar: 'https://files.catbox.moe/pri0c4.jpg'
     }
 ];
 
