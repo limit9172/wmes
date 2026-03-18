@@ -17,6 +17,14 @@
       "destination": "/public/assets/$1"
     },
     {
+      "source": "/robots.txt",
+      "destination": "robots.txt"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "sitemap.xml"
+    },
+    {
       "source": "/(.*)",
       "destination": "/public/$1"
     }
