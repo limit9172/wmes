@@ -39,7 +39,7 @@ const teamData = [
         name: 'Lizarus',
         role: 'admin',
         motto:'kami masuk tanpa izin, keluar tanpa jejak—meninggalkan pelajaran, bukan luka',
-        avatar: 'https://files.catbox.moe/2rkywj.jpg'
+        avatar: 'https://files.catbox.moe/jvholz.jpg'
     },
     {
         name: './Mr-Shahed',
