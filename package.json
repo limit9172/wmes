@@ -1,0 +1,16 @@
+{
+  "name": "wmes-website",
+  "version": "1.0.0",
+  "description": "WMES Official Website",
+  "main": "api/server.js",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "vercel": "^34.0.0"
+  }
+}
