@@ -1,27 +1,27 @@
 const teamData = [
     {
-        name: 'zikri',
+        name: './Mr-Rubic',
         role: 'founder & bug hunter',
         motto: 'melihat yang tak terlihat. data adalah bayangan',
-        avatar: 'assets/zikri.jpg'
+        avatar: 'https://api.dicebear.com/9.x/identicon/svg?seed=Mr-Rubic&backgroundColor=ff4d4d'
     },
     {
         name: 'ZenithxNecxus',
         role: 'admin & bug hunter',
         motto: 'Belajar, melindungi, dan berbagi demi keamanan digital',
-        avatar: 'assets/zenithx.jpg'
+        avatar: 'https://api.dicebear.com/9.x/identicon/svg?seed=ZenithxNecxus&backgroundColor=ff4d4d'
     },
     {
         name: './Mr-AliExploit',
         role: 'admin',
         motto: 'Menjaga keamanan digital dengan ilmu dan tanggung jawab',
-        avatar: 'assets/aliexploit.jpg'
+        avatar: 'https://api.dicebear.com/9.x/identicon/svg?seed=Mr-AliExploit&backgroundColor=ff4d4d'
     },
     {
-        name: 'Arya7177.html',    
+        name: 'Aryx7177.html',    
         role: 'admin',
         motto: 'Menggunakan pengetahuan untuk menjaga, bukan menyalahgunakan',
-        avatar: 'assets/Arya7177.html.jpg'
+        avatar: 'https://api.dicebear.com/9.x/identicon/svg?seed=Aryx7177&backgroundColor=ff4d4d'
     }
 ];
 
@@ -33,7 +33,7 @@ function renderTeam() {
     container.innerHTML = teamData.map(member => `
         <div class="team-card">
             <div class="card-avatar">
-                <img src="${member.avatar}" alt="${member.name}" loading="lazy" onerror="this.src='https://via.placeholder.com/80?text=${member.name[0]}'">
+                <img src="${member.avatar}" alt="${member.name}" loading="lazy">
             </div>
             <div class="card-info">
                 <h3 class="card-name">${member.name}</h3>
@@ -44,14 +44,13 @@ function renderTeam() {
     `).join('');
 }
 
-// ===== LOADER 1 DETIK =====
+// ===== LOADER =====
 window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
     if (loader) {
-        // Muncul 1 detik dulu baru ilang
         setTimeout(() => {
             loader.classList.add('hidden');
-        }, 1000); // ← ganti angka ini kalo mau lebih lama/cepat
+        }, 1000);
     }
 });
 
