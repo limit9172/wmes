@@ -36,16 +36,16 @@ const teamData = [
         avatar: 'https://files.catbox.moe/kh830t.jpg'
     },
     {
-        name: 'Lizarus',
+        nama: 'Lizarus',
         role: 'admin',
         motto:'kami masuk tanpa izin, keluar tanpa jejak—meninggalkan pelajaran, bukan luka',
-        avatar: 'https://files.catbox.moe/jvholz.jpg'
+        avatar: 'https://iili.io/qj0vGln.jpg'
     },
     {
-        name: './Mr-Shahed',
+        nama: './Mr-Shahed',
         role: 'aadmin',
         motto: 'Kami bukan ancaman, kami adalah bayangan yang mengingatkan bahwa keamanan itu ilusi',
-        avatar: 'https://files.catbox.moe/1b16ah.jpg'
+        avatar: 'https://iili.io/qj0SC41.jpg'
     }
 
 ];
