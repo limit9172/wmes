@@ -1,13 +1,13 @@
 const teamData = [
     {
         name: './Mr-Rubic',
-        role: 'founder & bug hunter',
+        role: 'founder ',
         motto: 'melihat yang tak terlihat. data adalah bayangan',
         avatar: 'https://files.catbox.moe/haxm0f.jpg'
     },
     {
         name: 'ZenithxNecxus',
-        role: 'admin & bug hunter',
+        role: 'founder 2',
         motto: 'Belajar, melindungi, dan berbagi demi keamanan digital',
         avatar: 'https://files.catbox.moe/lxek04.jpg'
     },
@@ -43,7 +43,7 @@ const teamData = [
     },
     {
         nama: './Mr-Shahed',
-        role: 'aadmin',
+        role: 'admin',
         motto: 'Kami bukan ancaman, kami adalah bayangan yang mengingatkan bahwa keamanan itu ilusi',
         avatar: 'https://iili.io/qj0SC41.jpg'
     }
