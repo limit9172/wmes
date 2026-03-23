@@ -1,5 +1,3 @@
-const fetch = require('node-fetch');
-
 module.exports = async (req, res) => {
     // CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -22,20 +20,24 @@ module.exports = async (req, res) => {
     }
     
     try {
-        // Fetch dari crt.sh
+        // Fetch dari crt.sh pake node built-in http
+        const https = require('https');
+        
         const url = `https://crt.sh/?q=%25.${domain}&output=json`;
         
-        const response = await fetch(url, {
-            headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-            }
+        const data = await new Promise((resolve, reject) => {
+            https.get(url, (resp) => {
+                let body = '';
+                resp.on('data', (chunk) => body += chunk);
+                resp.on('end', () => {
+                    try {
+                        resolve(JSON.parse(body));
+                    } catch (e) {
+                        reject(e);
+                    }
+                });
+            }).on('error', reject);
         });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-        
-        const data = await response.json();
         
         // Extract subdomains
         const subdomains = new Set();
