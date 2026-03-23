@@ -3,7 +3,26 @@
   "public": true,
   "cleanUrls": true,
   "trailingSlash": false,
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ],
   "rewrites": [
+    {
+      "source": "/api/subdomain",
+      "destination": "/api/subdomain.js"
+    },
     {
       "source": "/css/(.*)",
       "destination": "/public/css/$1"
@@ -17,20 +36,8 @@
       "destination": "/public/assets/$1"
     },
     {
-      "source": "/robots.txt",
-      "destination": "/public/robots.txt"
-    },
-    {
-      "source": "/sitemap.xml",
-      "destination": "/public/sitemap.xml"
-    },
-    {
-      "source": "/api",
-      "destination": "/public/api/index.html"
-    },
-    {
-      "source": "/api/(.*)",
-      "destination": "/public/api/$1"
+      "source": "/subdomain",
+      "destination": "/public/subdomain.html"
     },
     {
       "source": "/(.*)",
