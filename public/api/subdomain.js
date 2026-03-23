@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-    
+
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     
@@ -13,6 +13,7 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Domain parameter required' });
     }
     
+    
     const domainRegex = /^[a-zA-Z0-9][a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!domainRegex.test(domain)) {
         return res.status(400).json({ error: 'Invalid domain format' });
@@ -21,7 +22,7 @@ export default async function handler(req, res) {
     try {
         const response = await fetch(`https://crt.sh/?q=%25.${domain}&output=json`);
         const data = await response.json();
-        
+
         const subdomains = new Set();
         
         for (const item of data) {
