@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subdomain Scanner | WMES OSINT</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/subdomain.css">
+    <link rel="icon" href="/assets/favicon.png">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text">W.M.E.S</span>
+                <span class="logo-dot">_</span>
+            </div>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-links" id="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/subdomain" class="nav-link active">Subdomain</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="subdomain-section">
+            <div class="container">
+                <div class="back-home">
+                    <a href="/" class="back-home-link">
+                        <span class="back-arrow"></span>
+                        <span>back to home</span>
+                    </a>
+                </div>
+                
+                <h2 class="section-title">/ subdomain scanner</h2>
+                <p class="home-subtitle">Cari subdomain dari suatu domain menggunakan Certificate Transparency Logs (crt.sh)</p>
+                
+                <div class="search-box">
+                    <div class="search-input-group">
+                        <input type="text" id="domainInput" class="search-input" placeholder="example.com" value="wmes.my.id">
+                        <button class="search-btn" id="searchBtn">Scan</button>
+                    </div>
+                </div>
+                
+                <div class="results-area" id="resultsArea" style="display: none;">
+                    <div class="results-header">
+                        <div class="results-icon"></div>
+                        <h3>Subdomain Results</h3>
+                        <span class="count-badge" id="countBadge">0</span>
+                    </div>
+                    <div class="results-content" id="resultsContent">
+                        <div class="loading">
+                            <div class="loading-spinner"></div>
+                            <p>loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/js/main.js"></script>
+    <script src="/js/subdomain.js"></script>
+</body>
+</html>
