@@ -1,4 +1,7 @@
-export default async function handler(req, res) {
+const fetch = require('node-fetch');
+
+module.exports = async (req, res) => {
+    // CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     
@@ -12,12 +15,14 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'Domain parameter required' });
     }
     
+    // Validate domain
     const domainRegex = /^[a-zA-Z0-9][a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!domainRegex.test(domain)) {
         return res.status(400).json({ error: 'Invalid domain format' });
     }
     
     try {
+        // Fetch dari crt.sh
         const url = `https://crt.sh/?q=%25.${domain}&output=json`;
         
         const response = await fetch(url, {
@@ -32,7 +37,7 @@ export default async function handler(req, res) {
         
         const data = await response.json();
         
-        // Extract subdomains dari response
+        // Extract subdomains
         const subdomains = new Set();
         
         for (const item of data) {
@@ -57,10 +62,10 @@ export default async function handler(req, res) {
         });
         
     } catch (error) {
-        console.error('Error fetching from crt.sh:', error);
+        console.error('Error:', error);
         return res.status(500).json({
             error: 'Failed to fetch subdomains',
             message: error.message
         });
     }
-}
+};
