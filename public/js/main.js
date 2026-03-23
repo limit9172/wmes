@@ -47,9 +47,7 @@ const teamData = [
         motto: 'Kami bukan ancaman, kami adalah bayangan yang mengingatkan bahwa keamanan itu ilusi',
         avatar: 'https://iili.io/qj0SC41.jpg'
     }
-
 ];
-
 
 function renderTeam() {
     const container = document.getElementById('team-grid');
@@ -69,7 +67,6 @@ function renderTeam() {
     `).join('');
 }
 
-
 window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
     if (loader) {
@@ -78,7 +75,6 @@ window.addEventListener('load', () => {
         }, 1000);
     }
 });
-
 
 document.querySelectorAll('.nav-link').forEach(link => {
     link.addEventListener('click', (e) => {
@@ -116,7 +112,30 @@ window.addEventListener('scroll', () => {
     });
 });
 
-
 document.addEventListener('DOMContentLoaded', () => {
     renderTeam();
 });
+
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('nav-links');
+
+if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navLinks.classList.toggle('active');
+    });
+    
+    navLinks.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+        });
+    });
+    
+    document.addEventListener('click', (e) => {
+        if (!navLinks.contains(e.target) && !hamburger.contains(e.target) && navLinks.classList.contains('active')) {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+        }
+    });
+}
