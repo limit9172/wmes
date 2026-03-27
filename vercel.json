@@ -47,5 +47,15 @@
       "source": "/(.*)",
       "destination": "/public/$1"
     }
+  ],
+  "routes": [
+    {
+      "src": "/[^/]+\\.[^/]+$",
+      "dest": "/public/$0"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/index.html"
+    }
   ]
 }
