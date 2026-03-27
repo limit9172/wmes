@@ -24,6 +24,10 @@
       "destination": "/api/subdomain.js"
     },
     {
+      "source": "/api/track",
+      "destination": "/api/track.js"
+    },
+    {
       "source": "/css/(.*)",
       "destination": "/public/css/$1"
     },
